@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amara Osei — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0b0e14;
+    --ink-soft:#131720;
+    --paper:#e4e7ec;
+    --paper-dim:#8a93a3;
+    --accent:#4c8fff;
+    --accent-soft:#82aeff;
+    --line:#232838;
+    --mono:'IBM Plex Mono', monospace;
+    --disp:'Sora', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent); color:var(--ink);}
+
+  .wrap{max-width:880px; margin:0 auto; padding:0 24px;}
+
+  /* ---- nav ---- */
+  nav{
+    position:sticky; top:0; z-index:10;
+    background:rgba(11,14,20,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; justify-content:space-between; align-items:center; height:56px;}
+  .brand{font-family:var(--mono); font-size:14px; color:var(--accent);}
+  .navlinks{display:flex; gap:22px; font-family:var(--mono); font-size:13px;}
+  .navlinks a{text-decoration:none; color:var(--paper-dim); transition:color .15s;}
+  .navlinks a:hover{color:var(--accent);}
+
+  /* ---- notebook cell shell ---- */
+  .cell{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:0 18px;
+    margin:0 0 2px 0;
+  }
+  .cell-marker{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--accent);
+    padding-top:26px;
+    text-align:right;
+    white-space:nowrap;
+  }
+  .cell-body{
+    border-left:1px solid var(--line);
+    padding:24px 0 24px 20px;
+  }
+  section{padding-top:8px;}
+
+  /* ---- hero ---- */
+  .hero .cell-body{border-left:1px solid var(--accent);}
+  h1{
+    font-family:var(--disp);
+    font-size:clamp(32px, 5vw, 52px);
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:var(--paper);
+  }
+  .role{
+    font-family:var(--mono);
+    color:var(--accent);
+    font-size:15px;
+    margin-top:6px;
+  }
+  .tagline{
+    max-width:560px;
+    margin-top:16px;
+    color:var(--paper-dim);
+    font-size:16px;
+  }
+  .hero-links{display:flex; gap:16px; margin-top:22px; font-family:var(--mono); font-size:13px;}
+  .hero-links a{
+    border:1px solid var(--line);
+    padding:8px 14px;
+    text-decoration:none;
+    transition:.15s;
+  }
+  .hero-links a:hover{border-color:var(--accent); color:var(--accent);}
+  .hero-links a.primary{background:var(--accent); color:var(--ink); border-color:var(--accent); font-weight:600;}
+  .hero-links a.primary:hover{background:var(--accent-soft); border-color:var(--accent-soft); color:var(--ink);}
+
+  .out-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:#5c6577;
+    margin-bottom:8px;
+  }
+
+  /* ---- section headers ---- */
+  h2{
+    font-family:var(--disp);
+    font-size:22px;
+    font-weight:600;
+    color:var(--paper);
+    margin-bottom:14px;
+  }
+
+  /* ---- skills ---- */
+  .skill-groups{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:20px;}
+  .skill-group h3{
+    font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--accent); margin-bottom:10px;
+  }
+  .tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{
+    font-family:var(--mono); font-size:12px;
+    border:1px solid var(--line); padding:5px 10px;
+    color:var(--paper-dim);
+  }
+
+  /* ---- projects ---- */
+  .project{
+    border:1px solid var(--line);
+    padding:22px;
+    margin-bottom:20px;
+    background:var(--ink-soft);
+  }
+  .project-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;}
+  .project h3{font-family:var(--disp); font-size:19px; font-weight:600;}
+  .project .stack{font-family:var(--mono); font-size:11px; color:var(--accent); margin-top:4px;}
+  .project p{color:var(--paper-dim); margin-top:10px; font-size:14.5px; max-width:560px;}
+  .metrics{display:flex; gap:22px; margin-top:16px; flex-wrap:wrap;}
+  .metric{font-family:var(--mono);}
+  .metric .num{font-size:22px; color:var(--accent); font-weight:600; display:block;}
+  .metric .label{font-size:11px; color:#5c6577;}
+  .project-links{display:flex; gap:14px; margin-top:16px; font-family:var(--mono); font-size:12px;}
+  .project-links a{text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px;}
+  .project-links a:hover{text-decoration-color:var(--accent); color:var(--accent);}
+  .chart{margin-top:16px;}
+
+  /* ---- about ---- */
+  .about-text{max-width:600px; color:var(--paper-dim); font-size:15px;}
+  .about-text p{margin-bottom:12px;}
+
+  /* ---- contact ---- */
+  .contact-list{display:flex; flex-wrap:wrap; gap:22px; font-family:var(--mono); font-size:14px; margin-top:6px;}
+  .contact-list a{text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:4px;}
+  .contact-list a:hover{color:var(--accent); text-decoration-color:var(--accent);}
+
+  footer{
+    text-align:center; padding:30px 24px 50px;
+    font-family:var(--mono); font-size:12px; color:#3a4051;
+  }
+
+  @media (max-width:600px){
+    .cell{grid-template-columns:40px 1fr; gap:0 10px;}
+    .cell-marker{font-size:10px; padding-top:22px;}
+    .navlinks{gap:14px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">amara_osei.py</div>
+    <div class="navlinks">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="cell hero">
+    <div class="cell-marker">In [1]:</div>
+    <div class="cell-body">
+      <h1>Amara Osei</h1>
+      <div class="role">Data Analyst — Retail &amp; Marketing Analytics</div>
+      <p class="tagline">I turn messy transactional data into decisions — churn models, pricing experiments, and dashboards that people actually open twice.</p>
+      <div class="hero-links">
+        <a class="primary" href="#projects">View projects</a>
+        <a href="mailto:amara.osei@example.com">Email me</a>
+        <a href="https://github.com/example" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell" id="about">
+    <div class="cell-marker">In [2]:</div>
+    <div class="cell-body">
+      <section>
+        <h2>About</h2>
+        <div class="about-text">
+          <p>Three years turning spreadsheets and SQL warehouses into things stakeholders can act on. Most recently I rebuilt a subscription business's churn dashboard, which shortened the time-to-flag for at-risk accounts from three weeks to three days.</p>
+          <p>I care about the boring parts: clean pipelines, version-controlled analysis, notebooks other people can actually rerun. Comfortable presenting findings to execs, just as comfortable arguing about join keys with an engineer.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="cell" id="skills">
+    <div class="cell-marker">In [3]:</div>
+    <div class="cell-body">
+      <section>
+        <h2>Skills</h2>
+        <div class="skill-groups">
+          <div class="skill-group">
+            <h3>Languages &amp; Query</h3>
+            <div class="tags">
+              <span class="tag">Python</span>
+              <span class="tag">SQL</span>
+              <span class="tag">R</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h3>Analysis</h3>
+            <div class="tags">
+              <span class="tag">pandas</span>
+              <span class="tag">scikit-learn</span>
+              <span class="tag">A/B testing</span>
+              <span class="tag">cohort analysis</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h3>Viz &amp; BI</h3>
+            <div class="tags">
+              <span class="tag">Tableau</span>
+              <span class="tag">Looker</span>
+              <span class="tag">matplotlib</span>
+            </div>
+          </div>
+          <div class="skill-group">
+            <h3>Data &amp; Infra</h3>
+            <div class="tags">
+              <span class="tag">BigQuery</span>
+              <span class="tag">dbt</span>
+              <span class="tag">Airflow</span>
+              <span class="tag">Git</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="cell" id="projects">
+    <div class="cell-marker">In [4]:</div>
+    <div class="cell-body">
+      <section>
+        <h2>Projects</h2>
+
+        <div class="project">
+          <div class="project-top">
+            <div>
+              <h3>Subscription Churn Prediction</h3>
+              <div class="stack">python · scikit-learn · SQL · Looker</div>
+            </div>
+          </div>
+          <p>Built a gradient-boosted model to flag accounts likely to cancel within 30 days, using usage frequency, support ticket history, and billing events. Shipped as a weekly-refreshed dashboard for the retention team.</p>
+          <div class="metrics">
+            <div class="metric"><span class="num">0.84</span><span class="label">ROC-AUC</span></div>
+            <div class="metric"><span class="num">-18%</span><span class="label">churn, pilot cohort</span></div>
+            <div class="metric"><span class="num">12k</span><span class="label">accounts scored weekly</span></div>
+          </div>
+          <div class="out-tag" style="margin-top:16px;">Out[4]:</div>
+          <div class="chart">
+            <svg viewBox="0 0 400 90" width="100%" height="90" preserveAspectRatio="none">
+              <polyline points="0,70 40,64 80,66 120,50 160,52 200,38 240,40 280,24 320,28 360,12 400,16"
+                fill="none" stroke="#4c8fff" stroke-width="2"/>
+              <line x1="0" y1="85" x2="400" y2="85" stroke="#232838" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noopener">Case study</a>
+            <a href="#" target="_blank" rel="noopener">Code</a>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-top">
+            <div>
+              <h3>Pricing Experiment: Free Trial Length</h3>
+              <div class="stack">SQL · R · A/B testing</div>
+            </div>
+          </div>
+          <p>Designed and analyzed a 6-week experiment testing 7-day vs. 14-day free trials across three markets. Presented findings and a recommendation to product leadership.</p>
+          <div class="metrics">
+            <div class="metric"><span class="num">+6.4%</span><span class="label">trial-to-paid</span></div>
+            <div class="metric"><span class="num">42k</span><span class="label">users in test</span></div>
+            <div class="metric"><span class="num">p&lt;0.01</span><span class="label">significance</span></div>
+          </div>
+          <div class="out-tag" style="margin-top:16px;">Out[5]:</div>
+          <div class="chart">
+            <svg viewBox="0 0 400 90" width="100%" height="90" preserveAspectRatio="none">
+              <rect x="20" y="30" width="40" height="55" fill="#232838"/>
+              <rect x="90" y="12" width="40" height="73" fill="#4c8fff"/>
+              <rect x="160" y="40" width="40" height="45" fill="#232838"/>
+              <rect x="230" y="18" width="40" height="67" fill="#4c8fff"/>
+              <rect x="300" y="45" width="40" height="40" fill="#232838"/>
+              <line x1="0" y1="85" x2="400" y2="85" stroke="#232838" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noopener">Case study</a>
+            <a href="#" target="_blank" rel="noopener">Code</a>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-top">
+            <div>
+              <h3>Regional Sales Dashboard Rebuild</h3>
+              <div class="stack">dbt · BigQuery · Tableau</div>
+            </div>
+          </div>
+          <p>Replaced a fragile stack of exported spreadsheets with a dbt-modeled warehouse and a Tableau dashboard refreshed nightly, cutting manual reporting work for the sales ops team from ~6 hours/week to near zero.</p>
+          <div class="metrics">
+            <div class="metric"><span class="num">6 hrs</span><span class="label">weekly time saved</span></div>
+            <div class="metric"><span class="num">14</span><span class="label">source spreadsheets retired</span></div>
+          </div>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noopener">Case study</a>
+            <a href="#" target="_blank" rel="noopener">Code</a>
+          </div>
+        </div>
+
+        <div class="project">
+          <div class="project-top">
+            <div>
+              <h3>Retail Performance Dashboard</h3>
+              <div class="stack">Power BI · DAX · Power Query</div>
+            </div>
+          </div>
+          <p>Interactive Power BI report tracking revenue, margin, and inventory turnover across store locations, with drill-through by region and product category. Refreshed nightly from the warehouse.</p>
+
+          <!--
+            OPTION A — Live embed:
+            1. In Power BI Desktop/Service, use File > Publish to web
+            2. Copy the <iframe> embed code Power BI gives you
+            3. Paste it here, replacing the placeholder div below
+            Note: Publish to web makes the report fully public — only use with non-sensitive/sample data.
+          -->
+          <div class="chart">
+            <img
+              src="images/retail-dashboard.png"
+              alt="Retail Performance Dashboard screenshot"
+              style="width:100%; border:1px solid var(--line); display:block;"
+            >
+          </div>
+          <!--
+            <iframe
+              title="Retail Performance Dashboard"
+              width="100%"
+              height="400"
+              src="PASTE_YOUR_PUBLISH_TO_WEB_URL_HERE"
+              frameborder="0"
+              allowFullScreen="true">
+            </iframe>
+          -->
+
+          <div class="project-links">
+            <a href="PASTE_YOUR_PUBLISH_TO_WEB_URL_HERE" target="_blank" rel="noopener">View live dashboard ↗</a>
+            <a href="#" target="_blank" rel="noopener">Case study</a>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <div class="cell" id="contact">
+    <div class="cell-marker">In [5]:</div>
+    <div class="cell-body">
+      <section>
+        <h2>Contact</h2>
+        <p style="color:var(--paper-dim); max-width:500px;">Open to data analyst and analytics engineering roles. Based in Lagos, happy to work remote.</p>
+        <div class="contact-list">
+          <a href="mailto:amara.osei@example.com">amara.osei@example.com</a>
+          <a href="https://linkedin.com/in/example" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/example" target="_blank" rel="noopener">GitHub</a>
+          <a href="#" target="_blank" rel="noopener">Résumé (PDF)</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</div>
+
+<footer>built with pandas, coffee, and one too many git commits — © 2026 Amara Osei</footer>
+
+</body>
+</html>
