@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Bank — Credit Risk Analysis | Oluwatosin Aremu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap navbar">
+    <div class="brand">oluwatosin_aremu</div>
+    <div class="navlinks">
+      <a href="../index.html">home</a>
+      <a href="../power-bi.html" class="active">power bi</a>
+      <a href="../excel.html">excel</a>
+      <a href="../index.html#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="detail-header">
+    <a href="../power-bi.html" style="font-family:var(--mono); font-size:12px; color:var(--paper-dim);">&larr; back to Power BI projects</a>
+    <div class="stack">Power BI · DAX · Power Query · Onyx Data Challenge, Sep 2025</div>
+    <h2>Nova Bank — Credit Risk Analysis</h2>
+  </div>
+
+  <img class="detail-cover" src="../images/nova-bank-cover.jpg" alt="Nova Bank credit risk dashboard screenshot">
+
+  <div class="detail-links">
+    <a class="primary" href="PASTE_YOUR_PUBLISH_TO_WEB_URL_HERE" target="_blank" rel="noopener">View live dashboard ↗</a>
+    <a href="https://github.com/theoluwatosindamilola" target="_blank" rel="noopener">Dataset / files</a>
+  </div>
+
+  <div class="report">
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Total Loans</div><div class="value">32,581</div><div class="sub">USA · UK · Canada</div></div>
+      <div class="kpi"><div class="label">Default Rate</div><div class="value">21.82%</div><div class="sub">7,108 defaulted loans</div></div>
+      <div class="kpi"><div class="label">Total Exposure</div><div class="value">$312.43M</div><div class="sub">Avg loan $9.59K</div></div>
+      <div class="kpi"><div class="label">Exposure at Default</div><div class="value">$75.18M</div><div class="sub">24.57% of portfolio</div></div>
+    </div>
+
+    <h3>1. Executive Overview</h3>
+    <p>Nova Bank operates a loan portfolio of 32,581 accounts across the United States, United Kingdom, and Canada, with total exposure of $312.43M. This analysis examines the portfolio's credit risk profile to identify default drivers, high-risk borrower segments, and geographic concentration, with the aim of informing lending policy.</p>
+    <p>The overall default rate of 21.82% is high for a retail lending portfolio, with 7,108 borrowers in default and $75.18M at risk — nearly a quarter of the portfolio.</p>
+
+    <h3>2. Key Findings</h3>
+
+    <h4>2.1 Loan Grade is the Strongest Default Predictor</h4>
+    <p>Default rate rises sharply from Grade A (9.96%) through Grade G (98.44%), making Grade G lending essentially non-viable under current risk parameters. Grades E, F, and G combined represent a significant concentration of default risk.</p>
+
+    <h4>2.2 Loan Purpose Drives Disproportionate Risk</h4>
+    <p>Debt Consolidation loans carry the highest default rate (28.59%), followed by Medical (26.70%) and Home Improvement (26.10%) — suggesting these borrowers are often already in financial distress at application. Venture (14.81%) and Education (17.22%) loans are comparatively low-risk.</p>
+
+    <h4>2.3 Financial Ratios Predict Default</h4>
+    <ul>
+      <li>High Risk (DTI &gt; 0.40): 22.7% of portfolio — <strong>44.32%</strong> default rate</li>
+      <li>Moderate Risk (DTI 0.20–0.40): 54.8% of portfolio — <strong>14.82%</strong> default rate</li>
+      <li>Safe (DTI &lt; 0.20): 22.5% of portfolio — <strong>10.98%</strong> default rate</li>
+    </ul>
+    <p>Borrowers with a prior default on file default again at <strong>37.56%</strong>, versus 18.09% for those with no prior history.</p>
+
+    <h4>2.4 Loan Term and Age Profile</h4>
+    <p>Shorter loan terms carry lower default risk — 12-month loans default at 19.94% versus 22.34% for 60-month loans. Borrowers above 60 show the highest default rate (28.4%); those aged 36–45 show the lowest (17.8%).</p>
+
+    <h4>2.5 Geographic Risk is Uniform</h4>
+    <p>Default rates are near-identical across Canada (21.4%), UK (21.8%), and USA (22.3%) — indicating the root cause of default is borrower profile, not geography. Ontario and London carry the highest absolute default volumes due to borrower concentration.</p>
+
+    <h3>3. Borrower Risk Segmentation</h3>
+    <p>Borrowers were segmented into three tiers by DTI ratio:</p>
+    <ul>
+      <li><strong>Safe</strong> (DTI &lt; 0.20): 4,016 borrowers, 10.98% default rate, avg income $86,770</li>
+      <li><strong>Moderate</strong> (0.20–0.40): ~18K borrowers, 14.82% default rate, avg income $70,020</li>
+      <li><strong>High Risk</strong> (DTI &gt; 0.40): ~10K borrowers, 38.52% default rate, avg income $51,450</li>
+    </ul>
+
+    <h3>4. Policy Recommendations</h3>
+    <table class="rec-table">
+      <tr><td>CRITICAL</td><td><strong>Restrict or eliminate Grade F/G lending</strong> — default rates of 70.54% and 98.44% almost certainly exceed any interest income generated.</td></tr>
+      <tr><td>HIGH</td><td><strong>Tighten DTI thresholds</strong> — implement a hard ceiling of 0.40 for new approvals, with enhanced diligence for 0.35–0.40.</td></tr>
+      <tr><td>HIGH</td><td><strong>Apply purpose-based risk pricing</strong> — higher rates or collateral requirements for Debt Consolidation and Medical loans.</td></tr>
+      <tr><td>MEDIUM</td><td><strong>Strengthen prior-default screening</strong> — mandatory income verification and lower LTI caps for applicants with prior defaults.</td></tr>
+      <tr><td>MEDIUM</td><td><strong>Favour shorter loan terms</strong> — incentivize 12-month terms through preferential rates.</td></tr>
+      <tr><td>LOW</td><td><strong>Maintain current geographic strategy</strong> — no country-specific adjustment needed; monitor volume in Ontario and London.</td></tr>
+    </table>
+
+    <h3>5. Conclusion</h3>
+    <p>Nova Bank's 21.82% default rate is driven primarily by concentrated risk in lower loan grades, high-DTI borrowers, and certain loan purposes — all screenable and manageable through tighter underwriting. Geographic diversification is working as intended, with risk evenly distributed across markets. Implementing the recommendations above — particularly DTI tightening and Grade F/G restrictions — would be expected to meaningfully reduce the default rate over a 12–24 month horizon.</p>
+
+  </div>
+
+</div>
+
+<footer>© 2026 Oluwatosin Aremu — built and hosted on GitHub Pages</footer>
+
+</body>
+</html>
