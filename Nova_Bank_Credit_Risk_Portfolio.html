@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nova Bank | Credit Risk Analysis</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; background: #F4F6F9; color: #2C3E50; line-height: 1.7; }
+
+  /* HEADER */
+  .header { background: #1B2A4A; padding: 48px 60px; display: flex; justify-content: space-between; align-items: center; }
+  .header-left h1 { font-size: 2.4rem; font-weight: 800; color: #fff; letter-spacing: 1px; }
+  .header-left h2 { font-size: 1.1rem; color: #F5A623; font-weight: 600; margin-top: 6px; letter-spacing: 2px; text-transform: uppercase; }
+  .header-right { text-align: right; }
+  .header-right .badge { background: #F5A623; color: #1B2A4A; font-weight: 800; padding: 8px 20px; border-radius: 4px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+  .header-right p { color: #8B949E; font-size: 0.85rem; margin-top: 8px; }
+  .gold-bar { height: 4px; background: #F5A623; }
+
+  /* CONTAINER */
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+  .kpi-card { background: #fff; border-radius: 8px; padding: 20px 24px; border-top: 4px solid #F5A623; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .kpi-card.red { border-top-color: #E84545; }
+  .kpi-card.green { border-top-color: #00C49A; }
+  .kpi-card label { font-size: 0.78rem; color: #8B949E; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+  .kpi-card .value { font-size: 2rem; font-weight: 800; color: #1B2A4A; }
+  .kpi-card.red .value { color: #E84545; }
+  .kpi-card.green .value { color: #00C49A; }
+  .kpi-card .sub { font-size: 0.78rem; color: #8B949E; margin-top: 4px; }
+
+  /* SECTION */
+  .section { margin-top: 48px; }
+  .section-title { font-size: 1.25rem; font-weight: 800; color: #1B2A4A; padding-bottom: 10px; border-bottom: 3px solid #F5A623; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sub-title { font-size: 1rem; font-weight: 700; color: #1B2A4A; margin: 24px 0 10px; }
+  p { margin-bottom: 14px; font-size: 0.95rem; }
+
+  /* GRADE TABLE */
+  .grade-table { width: 100%; border-collapse: collapse; margin: 20px 0; border-radius: 8px; overflow: hidden; }
+  .grade-table th { padding: 12px; text-align: center; font-size: 0.85rem; font-weight: 700; color: #fff; }
+  .grade-table td { padding: 12px; text-align: center; font-size: 0.95rem; font-weight: 600; }
+
+  /* RISK SEGMENT TABLE */
+  .seg-table { width: 100%; border-collapse: collapse; margin: 20px 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .seg-table th { background: #1B2A4A; color: #fff; padding: 14px 16px; text-align: left; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+  .seg-table td { padding: 14px 16px; font-size: 0.9rem; border-bottom: 1px solid #E0E4EA; }
+  .seg-table tr:last-child td { border-bottom: none; }
+  .seg-table tr.safe { background: #E1F5EE; }
+  .seg-table tr.moderate { background: #FFF8EC; }
+  .seg-table tr.high { background: #FCEBEB; }
+  .badge-safe { background: #00C49A; color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
+  .badge-mod { background: #F5A623; color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
+  .badge-high { background: #E84545; color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; }
+
+  /* FINDINGS */
+  .finding { display: flex; gap: 0; margin-bottom: 12px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .finding-num { background: #1B2A4A; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 18px 22px; display: flex; align-items: center; justify-content: center; min-width: 56px; }
+  .finding-body { background: #F4F6F9; padding: 16px 20px; flex: 1; }
+  .finding-body strong { display: block; color: #1B2A4A; margin-bottom: 4px; font-size: 0.95rem; }
+  .finding-body p { font-size: 0.875rem; color: #2C3E50; margin: 0; }
+
+  /* RECOMMENDATIONS */
+  .rec { display: flex; gap: 0; margin-bottom: 12px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .rec-priority { color: #fff; font-weight: 800; font-size: 0.7rem; padding: 18px 14px; display: flex; align-items: center; justify-content: center; min-width: 80px; text-align: center; line-height: 1.3; letter-spacing: 0.5px; }
+  .rec-body { background: #FAFBFC; padding: 16px 20px; flex: 1; border-left: none; }
+  .rec-body strong { display: block; color: #1B2A4A; margin-bottom: 6px; font-size: 0.95rem; }
+  .rec-body p { font-size: 0.875rem; color: #2C3E50; margin: 0; }
+  .critical { background: #E84545; }
+  .high-p { background: #C0392B; }
+  .medium-p { background: #F5A623; }
+  .low-p { background: #1B2A4A; }
+
+  /* BULLETS */
+  .bullet-list { list-style: none; padding: 0; margin: 12px 0; }
+  .bullet-list li { padding: 6px 0 6px 24px; position: relative; font-size: 0.9rem; }
+  .bullet-list li::before { content: '■'; position: absolute; left: 0; color: #F5A623; font-size: 0.7rem; top: 9px; }
+
+  /* GEO GRID */
+  .geo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  .geo-card { background: #fff; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .geo-card .country { font-size: 0.8rem; font-weight: 700; color: #8B949E; text-transform: uppercase; letter-spacing: 1px; }
+  .geo-card .rate { font-size: 2rem; font-weight: 800; margin: 8px 0; }
+  .geo-card .note { font-size: 0.78rem; color: #8B949E; }
+
+  /* FOOTER */
+  .footer { background: #1B2A4A; margin-top: 60px; padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; }
+  .footer p { color: #8B949E; font-size: 0.85rem; }
+  .footer .brand { color: #fff; font-weight: 700; font-size: 1rem; }
+  .footer .tool { background: #F5A623; color: #1B2A4A; font-weight: 700; font-size: 0.8rem; padding: 6px 16px; border-radius: 4px; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .geo-grid { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 20px; }
+    .header-right { text-align: left; }
+    .container { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>🏦 NOVA BANK</h1>
+    <h2>Credit Risk Analysis — Executive Summary</h2>
+  </div>
+  <div class="header-right">
+    <div class="badge">Onyx Data Challenge · Sep 2025</div>
+    <p>Tool: Microsoft Power BI &nbsp;|&nbsp; Dataset: 32,581 Loans</p>
+  </div>
+</div>
+<div class="gold-bar"></div>
+
+<div class="container">
+
+  <!-- KPI SNAPSHOT -->
+  <div class="section">
+    <div class="section-title">Portfolio Snapshot</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <label>Total Loans</label>
+        <div class="value">32,581</div>
+        <div class="sub">USA · UK · Canada</div>
+      </div>
+      <div class="kpi-card red">
+        <label>Default Rate</label>
+        <div class="value">21.82%</div>
+        <div class="sub">7,108 defaulted loans</div>
+      </div>
+      <div class="kpi-card">
+        <label>Total Exposure</label>
+        <div class="value">$312.43M</div>
+        <div class="sub">Avg loan $9.59K</div>
+      </div>
+      <div class="kpi-card red">
+        <label>Exposure at Default</label>
+        <div class="value">$75.18M</div>
+        <div class="sub">24.57% of portfolio</div>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <label>Avg Interest Rate</label>
+        <div class="value">11.01%</div>
+        <div class="sub">Across all loan grades</div>
+      </div>
+      <div class="kpi-card red">
+        <label>Avg DTI Ratio</label>
+        <div class="value">0.34</div>
+        <div class="sub">High risk threshold: 0.40</div>
+      </div>
+      <div class="kpi-card red">
+        <label>Prior Default Rate</label>
+        <div class="value">17.77%</div>
+        <div class="sub">5,765 borrowers</div>
+      </div>
+      <div class="kpi-card">
+        <label>Avg Credit History</label>
+        <div class="value">5.80 yrs</div>
+        <div class="sub">Consistent across countries</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE OVERVIEW -->
+  <div class="section">
+    <div class="section-title">1. Executive Overview</div>
+    <p>Nova Bank operates a loan portfolio of 32,581 accounts across the United States, United Kingdom, and Canada with a total exposure of $312.43 million. This analysis examines the credit risk profile of this portfolio to identify key default drivers, high-risk borrower segments, and geographic risk concentrations — with the aim of informing Nova Bank's lending policy and risk management strategy.</p>
+    <p>The overall default rate of 21.82% is materially high for a retail lending portfolio, with 7,108 borrowers having defaulted on their loans. Total exposure at default stands at $75.18 million — representing nearly a quarter of the entire portfolio. These figures indicate a significant credit risk challenge that warrants immediate attention across loan grading, borrower screening, and debt-to-income thresholds.</p>
+  </div>
+
+  <!-- KEY FINDINGS -->
+  <div class="section">
+    <div class="section-title">2. Key Findings</div>
+
+    <div class="sub-title">2.1 Loan Grade is the Strongest Default Predictor</div>
+    <p>Loan grade emerges as the single most powerful predictor of default. The relationship between grade and default rate is stark and consistent:</p>
+
+    <table class="grade-table">
+      <tr>
+        <th style="background:#1B4D3E">Grade A</th>
+        <th style="background:#2D6A4F">Grade B</th>
+        <th style="background:#52796F">Grade C</th>
+        <th style="background:#E9C46A;color:#1B2A4A">Grade D</th>
+        <th style="background:#E76F51">Grade E</th>
+        <th style="background:#E84545">Grade F</th>
+        <th style="background:#8B0000">Grade G</th>
+      </tr>
+      <tr>
+        <td style="background:#E1F5EE;color:#00C49A">9.96%</td>
+        <td style="background:#E1F5EE;color:#00C49A">16.28%</td>
+        <td style="background:#FFF8EC;color:#D4800A">20.73%</td>
+        <td style="background:#FFF3CD;color:#D4800A">59.05%</td>
+        <td style="background:#FCEBEB;color:#E84545">64.42%</td>
+        <td style="background:#FCEBEB;color:#E84545;font-weight:800">70.54%</td>
+        <td style="background:#FCEBEB;color:#E84545;font-weight:800">98.44%</td>
+      </tr>
+    </table>
+
+    <p>Grade G borrowers have a near-total default rate of 98.44%, making Grade G lending essentially non-viable. Grades E, F and G combined represent a severe concentration of default risk requiring immediate policy action.</p>
+
+    <div class="sub-title">2.2 Loan Purpose Drives Disproportionate Risk</div>
+    <ul class="bullet-list">
+      <li><strong>Debt Consolidation:</strong> 28.59% default rate — highest of all loan purposes</li>
+      <li><strong>Medical loans:</strong> 26.70% — borrowers already in financial distress at point of application</li>
+      <li><strong>Home Improvement:</strong> 26.10% — above-average risk</li>
+      <li><strong>Venture:</strong> 14.81% and <strong>Education:</strong> 17.22% — significantly safer</li>
+    </ul>
+    <p>This pattern suggests borrowers seeking to consolidate debt or manage emergency expenses are inherently higher risk. Purpose-based risk differentiation should be applied more rigorously in underwriting.</p>
+
+    <div class="sub-title">2.3 Financial Ratios Predict Default</div>
+    <p>The DTI and LTI ratios are strong predictors of default. The scatter analysis shows a clear cluster of defaulted loans at higher DTI and LTI values. Portfolio breakdown by risk tier:</p>
+    <ul class="bullet-list">
+      <li>High Risk borrowers (DTI &gt; 0.40): 22.7% of portfolio — default rate <strong style="color:#E84545">44.32%</strong></li>
+      <li>Moderate Risk (DTI 0.20–0.40): 54.8% of portfolio — default rate <strong style="color:#F5A623">14.82%</strong></li>
+      <li>Safe borrowers (DTI &lt; 0.20): 22.5% of portfolio — default rate <strong style="color:#00C49A">10.98%</strong></li>
+    </ul>
+    <p>Borrowers with prior defaults on file show a dramatically higher future default rate of <strong>37.56%</strong> compared to <strong>18.09%</strong> for those with no prior default history.</p>
+
+    <div class="sub-title">2.4 Loan Term and Borrower Age</div>
+    <p>Shorter loan terms consistently show lower default rates across all countries. 12-month loans default at 19.94% vs 22.34% for 60-month loans. Borrowers aged <strong>Above 60</strong> show the highest default rate (28.4%), while those aged <strong>36–45</strong> show the lowest (17.8%).</p>
+
+    <div class="sub-title">2.5 Geographic Risk is Uniform</div>
+    <div class="geo-grid">
+      <div class="geo-card">
+        <div class="country">Canada</div>
+        <div class="rate" style="color:#4A90D9">21.4%</div>
+        <div class="note">Default Rate</div>
+      </div>
+      <div class="geo-card">
+        <div class="country">UK</div>
+        <div class="rate" style="color:#F5A623">21.8%</div>
+        <div class="note">Default Rate</div>
+      </div>
+      <div class="geo-card">
+        <div class="country">USA</div>
+        <div class="rate" style="color:#E84545">22.3%</div>
+        <div class="note">Default Rate</div>
+      </div>
+    </div>
+    <p>Default rates are remarkably consistent across all three markets, confirming that root cause lies in borrower financial profile and loan characteristics — not geography. Ontario and London carry the highest absolute default volumes due to borrower concentration.</p>
+  </div>
+
+  <!-- RISK SEGMENTATION -->
+  <div class="section">
+    <div class="section-title">3. Borrower Risk Segmentation</div>
+    <p>Borrowers have been segmented into three risk tiers based on DTI ratio thresholds aligned with standard credit risk practice:</p>
+    <table class="seg-table">
+      <thead>
+        <tr>
+          <th>Segment</th>
+          <th>Count</th>
+          <th>Default Rate</th>
+          <th>Avg Income</th>
+          <th>Avg DTI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="safe">
+          <td><span class="badge-safe">SAFE (DTI &lt; 0.20)</span></td>
+          <td>4,016</td>
+          <td style="color:#00C49A;font-weight:700">10.98%</td>
+          <td>$86,770</td>
+          <td>0.16</td>
+        </tr>
+        <tr class="moderate">
+          <td><span class="badge-mod">MODERATE (0.20–0.40)</span></td>
+          <td>18K</td>
+          <td style="color:#F5A623;font-weight:700">14.82%</td>
+          <td>$70,020</td>
+          <td>0.30</td>
+        </tr>
+        <tr class="high">
+          <td><span class="badge-high">HIGH RISK (DTI &gt; 0.40)</span></td>
+          <td>10K</td>
+          <td style="color:#E84545;font-weight:700">38.52%</td>
+          <td>$51,450</td>
+          <td>0.50</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The High Risk segment generates a disproportionate share of defaults. The average income of High Risk borrowers ($51,450) is significantly lower than Safe borrowers ($86,770), reinforcing the link between income level, debt burden and default probability.</p>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="section">
+    <div class="section-title">4. Policy Recommendations</div>
+
+    <div class="rec">
+      <div class="rec-priority critical">CRITICAL</div>
+      <div class="rec-body">
+        <strong>Restrict or Eliminate Grade G and F Lending</strong>
+        <p>With default rates of 98.44% and 70.54% respectively, Grade G and F loans are generating losses that almost certainly exceed any interest income. Nova Bank should implement an immediate review with a view to imposing strict caps or suspension pending a full risk pricing review.</p>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-priority high-p">HIGH PRIORITY</div>
+      <div class="rec-body">
+        <strong>Tighten DTI Thresholds in Underwriting</strong>
+        <p>Borrowers with DTI &gt; 0.40 default at nearly 4× the rate of those with DTI &lt; 0.20. Implement a hard DTI ceiling of 0.40 for new approvals, with enhanced due diligence for applicants between 0.35–0.40.</p>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-priority high-p">HIGH PRIORITY</div>
+      <div class="rec-body">
+        <strong>Apply Purpose-Based Risk Pricing</strong>
+        <p>Debt Consolidation and Medical loans carry materially higher default rates than Education and Venture loans. Apply risk-adjusted pricing based on loan purpose — higher interest rates or additional collateral for high-risk categories.</p>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-priority medium-p">MEDIUM</div>
+      <div class="rec-body">
+        <strong>Strengthen Prior Default Screening</strong>
+        <p>Borrowers with a prior default on file default at 37.56% — nearly double the portfolio average. Implement enhanced screening including mandatory income verification, lower LTI caps and shorter initial loan terms.</p>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-priority medium-p">MEDIUM</div>
+      <div class="rec-body">
+        <strong>Favour Shorter Loan Terms</strong>
+        <p>Shorter terms (12 months) consistently carry lower default rates than longer terms (60 months) across all three countries. Incentivise shorter repayment terms through preferential rates.</p>
+      </div>
+    </div>
+
+    <div class="rec">
+      <div class="rec-priority low-p">LOW</div>
+      <div class="rec-body">
+        <strong>Maintain Current Geographic Strategy</strong>
+        <p>Near-identical default rates across Canada, UK and USA confirm that geographic diversification is not introducing concentration risk. No country-specific adjustment is required, though volume monitoring in Ontario and London is recommended.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="section">
+    <div class="section-title">5. Conclusion</div>
+    <p>This analysis reveals that Nova Bank faces a significant and addressable credit risk challenge. The 21.82% default rate is driven primarily by concentrated risk in lower loan grades (E, F, G), high-DTI borrowers, and certain loan purposes — particularly debt consolidation. These are characteristics that can be screened, priced and managed through more rigorous underwriting standards.</p>
+    <p>The portfolio's geographic diversification across three countries is working as intended — risk is evenly distributed and no single market is disproportionately exposed. The challenge is therefore an internal underwriting and risk segmentation problem, not a market or macroeconomic one.</p>
+    <p>Implementing the recommendations in this report — particularly the DTI threshold tightening and Grade F/G restrictions — would be expected to meaningfully reduce the default rate over a 12–24 month horizon while preserving the portfolio's core growth trajectory in safer risk segments.</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="brand">Nova Bank | Credit Risk Analysis</div>
+    <p>Onyx Data Challenge · September 2025</p>
+  </div>
+  <div>
+    <div class="tool">Built with Microsoft Power BI</div>
+  </div>
+</div>
+
+</body>
+</html>
