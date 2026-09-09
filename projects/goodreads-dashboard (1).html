@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Goodreads Book Reviews Dashboard | Case Study</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', sans-serif; background: #F1ECDD; color: #1F2430; line-height: 1.7; }
+
+  .header { background: #12182B; padding: 48px 60px; display: flex; justify-content: space-between; align-items: center; }
+  .header-left h1 { font-size: 2.2rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+  .header-left h2 { font-size: 1rem; color: #C9962C; font-weight: 600; margin-top: 6px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .header-right { text-align: right; }
+  .header-right .badge { background: #C9962C; color: #12182B; font-weight: 800; padding: 8px 20px; border-radius: 4px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+  .header-right p { color: #9AA3B5; font-size: 0.85rem; margin-top: 8px; }
+  .gold-bar { height: 4px; background: linear-gradient(90deg, #C9962C, #2E6F5E); }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 16px; }
+  .kpi-card { background: #fff; border-radius: 8px; padding: 18px 20px; border-top: 4px solid #C9962C; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .kpi-card.teal { border-top-color: #2E6F5E; }
+  .kpi-card label { font-size: 0.72rem; color: #8B8672; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px; }
+  .kpi-card .value { font-size: 1.6rem; font-weight: 800; color: #12182B; }
+  .kpi-card.teal .value { color: #2E6F5E; }
+  .kpi-card .sub { font-size: 0.75rem; color: #8B8672; margin-top: 4px; }
+
+  .section { margin-top: 48px; }
+  .section-title { font-size: 1.2rem; font-weight: 800; color: #12182B; padding-bottom: 10px; border-bottom: 3px solid #C9962C; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .page-badge { display: inline-block; background: #12182B; color: #C9962C; font-family: monospace; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; }
+  p { margin-bottom: 14px; font-size: 0.95rem; }
+
+  .rank-table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .rank-table th { background: #12182B; color: #fff; padding: 12px 16px; text-align: left; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+  .rank-table td { padding: 12px 16px; font-size: 0.9rem; background: #fff; border-bottom: 1px solid #E5DFC9; }
+  .rank-table tr:last-child td { border-bottom: none; }
+  .rank-table td.gold { color: #C9962C; font-weight: 700; }
+
+  .finding { display: flex; margin-bottom: 12px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .finding-icon { background: #12182B; color: #C9962C; font-weight: 800; font-size: 1.1rem; padding: 18px 22px; display: flex; align-items: center; justify-content: center; min-width: 56px; }
+  .finding-body { background: #fff; padding: 16px 20px; flex: 1; }
+  .finding-body strong { display: block; color: #12182B; margin-bottom: 4px; font-size: 0.95rem; }
+  .finding-body p { font-size: 0.875rem; color: #2C3040; margin: 0; }
+
+  .bullet-list { list-style: none; padding: 0; margin: 12px 0; }
+  .bullet-list li { padding: 6px 0 6px 24px; position: relative; font-size: 0.9rem; }
+  .bullet-list li::before { content: '■'; position: absolute; left: 0; color: #C9962C; font-size: 0.7rem; top: 9px; }
+
+  .screenshot-fig { margin: 20px 0 32px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.12); border: 1px solid #E5DFC9; }
+  .screenshot-fig img { width: 100%; display: block; }
+  .screenshot-fig figcaption { background: #12182B; color: #C9962C; font-family: monospace; font-size: 0.78rem; padding: 10px 16px; }
+
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  .skill-pill { background: #fff; border: 1px solid #C9962C; color: #12182B; font-size: 0.8rem; font-weight: 600; padding: 6px 14px; border-radius: 999px; }
+
+  .footer { background: #12182B; margin-top: 60px; padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .footer p { color: #9AA3B5; font-size: 0.85rem; }
+  .footer .brand { color: #fff; font-weight: 700; font-size: 1rem; }
+  .footer a { color: #C9962C; text-decoration: none; font-weight: 700; }
+
+  .top-nav { background: #0C1120; padding: 16px 60px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2A3350; }
+  .top-nav .brand { font-family: monospace; font-size: 0.85rem; color: #C9962C; }
+  .top-nav .links { display: flex; gap: 26px; font-family: monospace; font-size: 0.8rem; }
+  .top-nav .links a { color: #9AA3B5; text-decoration: none; }
+  .top-nav .links a:hover, .top-nav .links a.active { color: #C9962C; }
+
+  .live-btn { display: inline-block; background: #C9962C; color: #12182B; font-weight: 800; font-size: 0.85rem; padding: 10px 22px; border-radius: 4px; text-decoration: none; letter-spacing: 0.3px; }
+  .live-btn:hover { background: #E0B04A; }
+
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .header { flex-direction: column; gap: 20px; }
+    .header-right { text-align: left; }
+    .container { padding: 24px 16px; }
+    .top-nav { flex-direction: column; gap: 12px; padding: 16px 20px; text-align: center; }
+    .top-nav .links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-nav">
+  <div class="brand">oluwatosin_aremu</div>
+  <div class="links">
+    <a href="../index.html">home</a>
+    <a href="../power-bi.html" class="active">power bi</a>
+    <a href="../excel.html">excel</a>
+    <a href="../index.html#contact">contact</a>
+  </div>
+</div>
+
+<div class="header">
+  <div class="header-left">
+    <h1>📚 Goodreads</h1>
+    <h2>Book Reviews Dashboard — Case Study</h2>
+  </div>
+  <div class="header-right">
+    <p>Tool: Microsoft Power BI &nbsp;|&nbsp; Dataset: 13,069 Books · 1950–2021</p>
+    <p style="margin-top:12px;"><a href="PASTE_YOUR_PUBLISH_TO_WEB_URL_HERE" target="_blank" rel="noopener" class="live-btn">View live dashboard ↗</a></p>
+  </div>
+</div>
+<div class="gold-bar"></div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Portfolio Snapshot</div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><label>Total Books</label><div class="value">13,069</div><div class="sub">1950–2021</div></div>
+      <div class="kpi-card"><label>Total Authors</label><div class="value">5,351</div><div class="sub">unique authors</div></div>
+      <div class="kpi-card teal"><label>Total Rating</label><div class="value">431M</div><div class="sub">across dataset</div></div>
+      <div class="kpi-card teal"><label>Total Reviews</label><div class="value">1.11M</div><div class="sub">written reviews</div></div>
+      <div class="kpi-card"><label>Average Rating</label><div class="value">3.92</div><div class="sub">out of 5</div></div>
+    </div>
+    <p>A five-page interactive Power BI dashboard exploring 13,069 books from Goodreads, covering 5,351 authors and over 431 million ratings. Each page answers a different question — overall volume, popularity vs. controversy, genre performance, author rankings, and a searchable book lookup — with global slicers for author, publication year, and genre applied consistently across every page.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">1. Overview</div>
+    <div class="page-badge">PAGE 1 — OVERVIEW</div>
+    <figure class="screenshot-fig">
+      <img src="../images/goodreads-overview.png" alt="Overview page of the Goodreads dashboard">
+      <figcaption>Overview — KPI cards, most popular genres, ratings distribution, top books, publishing trend</figcaption>
+    </figure>
+    <p>Sets the scene with top-line KPIs and four supporting visuals: a genre ranking by total ratings (Fiction leads at 1.67bn), a ratings-distribution donut split into low/mid/high bands, the ten most-rated books (Harry Potter and The Hunger Games lead by a wide margin), and a publishing-trend line showing a sharp rise in output through the 2000s and 2010s before tapering off after 2015.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">2. Popularity &amp; Controversy Analysis</div>
+    <div class="page-badge">PAGE 2 — POPULARITY &amp; CONTROVERSY</div>
+    <figure class="screenshot-fig">
+      <img src="../images/goodreads-controversy.png" alt="Popularity and controversy analysis page">
+      <figcaption>Popularity &amp; Controversy — top books, controversy score table, ratings vs. reviews</figcaption>
+    </figure>
+
+    <div class="finding">
+      <div class="finding-icon">★</div>
+      <div class="finding-body">
+        <strong>Harry Potter and the Philosopher's Stone is the most popular book</strong>
+        <p>Popularity Score of 21.88M, calculated from a custom DAX measure combining rating volume and engagement — well ahead of The Hunger Games (21.8M) and Twilight (15.9M).</p>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon">⚖</div>
+      <div class="finding-body">
+        <strong>A custom Controversy Score surfaces the most divisive titles</strong>
+        <p>Scored 0–0.5, where 0.5 means an even split between lovers and haters regardless of a book's size. Titles like Zombie Blondes and Codex top the list at 0.50, each sitting at a flat 3.00 average rating despite very different popularity levels.</p>
+      </div>
+    </div>
+    <p>A paired comparison of top books by popularity versus by raw ratings count shows the two rankings mostly agree — but a combo chart of ratings against reviews per title reveals some books attract disproportionately more written reviews relative to their rating count, hinting at stronger reader engagement beyond a star rating.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">3. Genre Insights</div>
+    <div class="page-badge">PAGE 3 — GENRE INSIGHTS</div>
+    <figure class="screenshot-fig">
+      <img src="../images/goodreads-genre.png" alt="Genre insights page">
+      <figcaption>Genre Insights — genre popularity, highest-rated genres, ratings distribution, trend over time</figcaption>
+    </figure>
+    <p>Across 16 tracked genres, Fiction is the most popular by total ratings, but Comics and Graphic novels score highest on average rating (4.02) despite far lower volume — the classic popularity-vs-quality gap. A 100% stacked bar breaks down the 1–5 star distribution per genre, and a trend line tracks genre popularity over time, showing Fiction and Young-Adult both climbing sharply from the mid-2000s before the whole market cools off after 2015.</p>
+    <ul class="bullet-list">
+      <li>Most popular genre by volume: Fiction</li>
+      <li>Highest rated genre: Graphic (4.02 avg)</li>
+      <li>Genre with the most ratings and reviews: Young-Adult</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">4. Author Insights</div>
+    <div class="page-badge">PAGE 4 — AUTHOR INSIGHTS</div>
+    <figure class="screenshot-fig">
+      <img src="../images/goodreads-author.png" alt="Author insights page">
+      <figcaption>Author Insights — popularity vs. ratings, most prolific authors treemap, highest-rated authors</figcaption>
+    </figure>
+    <p>J.K. Rowling is the most popular author by a wide margin (72.44M popularity score, more than double the next author). A treemap of the most prolific authors is shaded by average rating so volume and quality can be read together at a glance — Stephen King leads on raw book count (53 titles), while Zoraida Cordova and Hiromu Arakawa top the ratings-count and average-rating leaderboards respectively.</p>
+    <table class="rank-table">
+      <thead><tr><th>Metric</th><th>Leader</th></tr></thead>
+      <tbody>
+        <tr><td>Most Popular Author</td><td class="gold">J.K. Rowling</td></tr>
+        <tr><td>Most Books Published</td><td class="gold">Stephen King (53)</td></tr>
+        <tr><td>Most Ratings Received</td><td class="gold">Zoraida Cordova</td></tr>
+        <tr><td>Highest Average Rating</td><td class="gold">Hiromu Arakawa</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5. Book Explorer</div>
+    <div class="page-badge">PAGE 5 — BOOK EXPLORER</div>
+    <figure class="screenshot-fig">
+      <img src="../images/goodreads-explorer.png" alt="Book explorer search page">
+      <figcaption>Book Explorer — search any title to see its cover, details, and calculated scores</figcaption>
+    </figure>
+    <p>A dedicated lookup page: search for any of the 13,069 titles and see its cover, author, genre, and publication year, alongside four calculated metrics generated by the report's DAX layer — Controversy Score, Popularity Score, Engagement Score, and Average Rating — recalculated live as the search changes.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Skills Demonstrated</div>
+    <div class="skills-grid">
+      <span class="skill-pill">DAX measures</span>
+      <span class="skill-pill">Power Query</span>
+      <span class="skill-pill">Custom scoring models</span>
+      <span class="skill-pill">Multi-page navigation</span>
+      <span class="skill-pill">Search &amp; drill-through</span>
+      <span class="skill-pill">Data storytelling</span>
+    </div>
+    <p>End-to-end workflow from raw Goodreads export to a five-page interactive report, including two custom-built DAX metrics (Controversy Score and Popularity Score) not present in the source data, and a searchable book-lookup page built with drill-through and dynamic card visuals.</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>
+    <div class="brand">Goodreads Book Reviews Dashboard</div>
+    <p>Personal analytics project · Built with Power BI</p>
+  </div>
+  <div>
+    <a href="../power-bi.html">&larr; back to Power BI projects</a>
+  </div>
+</div>
+
+</body>
+</html>
