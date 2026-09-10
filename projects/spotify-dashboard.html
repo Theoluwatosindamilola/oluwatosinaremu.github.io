@@ -131,13 +131,6 @@
     gap: 12px;
     margin-bottom: 8px;
   }
-  .spotify-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--green);
-    display: inline-block;
-  }
   footer {
     margin-top: 60px;
     padding-top: 24px;
@@ -186,28 +179,82 @@
     border-color: #666666;
     color: #ffffff;
   }
+
+  /* --- site nav, styled to match this page's own theme --- */
+  .top-nav {
+    background: #0a0a0a;
+    padding: 16px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .top-nav .brand {
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--green);
+  }
+  .top-nav .links {
+    display: flex;
+    gap: 26px;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 13px;
+  }
+  .top-nav .links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .top-nav .links a:hover,
+  .top-nav .links a.active {
+    color: var(--green);
+  }
+  @media (max-width: 700px) {
+    .top-nav { flex-direction: column; gap: 12px; padding: 16px 20px; text-align: center; }
+    .top-nav .links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+  }
+
+  /* --- Spotify-style logo mark --- */
+  .spotify-logo {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+  .back-link {
+    display: inline-block;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 12px;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+  .back-link:hover { color: var(--green); }
 </style>
 </head>
 <body>
-  
-<nav>
-  <div class="wrap navbar">
-    <div class="brand">Oluwatosin Aremu</div>
-    <div class="navlinks">
-      <a href="../index.html">Home</a>
-      <a href="../power-bi.html" class="active">Power bi</a>
-      <a href="../excel.html">Excel</a>
-      <a href="../index.html#contact">Contact</a>
-    </div>
-  </div>
-</nav>
-  
-<div class="wrap">
-  
-  <div class="detail-header">
-    <a href="../power-bi.html" style="font-family:var(--mono); font-size:12px; color:var(--paper-dim);">&larr; back to Power BI projects</a>
 
-  <div class="header-bar"><span class="spotify-dot"></span><span class="eyebrow">Project Case Study</span></div>
+<div class="top-nav">
+  <div class="brand">Oluwatosin Aremu</div>
+  <div class="links">
+    <a href="../index.html">Home</a>
+    <a href="../power-bi.html" class="active">Power bi</a>
+    <a href="../excel.html">Excel</a>
+    <a href="../index.html#contact">Contact</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <a href="../power-bi.html" class="back-link">&larr; back to Power BI projects</a>
+
+  <div class="header-bar">
+    <svg class="spotify-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="12" fill="#1DB954"/>
+      <path d="M6.5 9.8c3.2-1 6.8-.7 9.6 1" stroke="#0d0d0d" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M6.8 12.6c2.7-.8 5.7-.5 8 .9" stroke="#0d0d0d" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M7.2 15.3c2.2-.6 4.6-.4 6.5.7" stroke="#0d0d0d" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    <span class="eyebrow">Project Case Study</span>
+  </div>
   <h1>My Spotify Listening Analysis Dashboard</h1>
   <p class="subtitle">A two-page Power BI dashboard analyzing personal Spotify listening history — built end-to-end from raw export data to an interactive, published report.</p>
 
@@ -218,13 +265,14 @@
     <span class="badge">Power Query</span>
     <span class="badge">Data Storytelling</span>
   </div>
-  
-<div class="project-links">
+
+  <div class="project-links">
     <a href="https://app.powerbi.com/view?r=eyJrIjoiZWU2MGExNTgtNzVjMC00NjYzLTkxNWUtNzQ3YzFiM2NmNzkyIiwidCI6IjI1Y2UwMjYxLWJiZDYtNDljZC1hMWUyLTU0MjYwODg2ZDE1OSJ9" class="btn-primary" target="_blank" rel="noopener">View live dashboard ↗</a>
     <a href="YOUR_GITHUB_REPO_OR_FILES_LINK_HERE" class="btn-secondary" target="_blank" rel="noopener">Dataset / files</a>
   </div>
 
   <hr>
+
 
   <h2>Overview</h2>
   <p>This project turns raw personal Spotify streaming history into an interactive Power BI dashboard. It covers the full analytics workflow: requesting and exporting the data from Spotify, cleaning and reshaping it with Python, modeling it in Power BI, and designing a two-page report with custom DAX measures, a day-by-hour listening heatmap, and bookmark-driven page navigation.</p>
